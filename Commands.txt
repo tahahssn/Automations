@@ -1,0 +1,89 @@
+# Updating machine to latest versions
+sudo apt update && sudo apt upgrade -y
+
+# Install docker to machine
+sudo apt  install -y docker.io  
+# Check docker
+docker --version
+
+# Install docker compose to machine
+sudo apt install -y docker-compose
+# Check docker compose
+docker compose --version
+
+
+# Create a dedicated folder
+mkdir ~/n8n && cd ~/n8n
+
+# Create the compose file
+nano docker-compose.yml
+
+# Paste from docker-compose.yml file don't forget to update your public IP for that 
+
+# Add ubuntu user to docker group
+sudo usermod -aG docker ubuntu
+
+# Apply the group change to current session
+newgrp docker
+
+# Verify the group is applied
+groups
+
+# Start n8n in the background
+docker-compose up -d
+
+# Check it's running
+docker ps
+
+# View live logs
+docker-compose logs -f
+
+# If stuck in terminal best command to come out of it is 'Ctrl + C'
+
+# Access n8n from your browser using this link 
+http://'Your EC2 PubliC IP':5678/
+
+Login on n8n 
+Activate your license
+
+Provided a basic discord-truthdare.json file 
+Use that to create the n8n workflow 
+- 3 Dots ->  Import from file -> discord-truthdare.json
+
+Add your own Gemini API Key 
+Most things are setup if there is any error contact me or Claude
+
+/*
+-- Discord-bot.js --
+
+For setting up discord we connected discord-bot.js through webhook 
+discord-bot.js accesses the discord bot not the n8n workflow
+Acts as a bridge
+Bot token is empty in discord-bot.js
+https://discord.com/login?redirect_to=%2Fdevelopers
+
+Create new application and generate token 
+
+Also on discord-bot.js Line 109 Change  text: 'Made by Affan | Powered by n8n'   to   text: 'Made by YourName | Inspired by Affan | Powered by n8n'  
+Thanks :)
+*/
+
+
+
+# Install Dependencies
+
+sudo apt install npm
+npm init -y
+npm install discord.js axios dotenv
+
+cd ~/n8n
+
+nano discord-bot.js
+
+# Paste the file contents 
+
+Volla We are done test the webhook using n8n and 
+If there is any error contact me or Claude
+
+Try it from Discord as well message your bot 
+Commands : !help, !truth, !dare
