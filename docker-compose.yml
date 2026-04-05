@@ -11,7 +11,7 @@ services:
       - N8N_HOST=0.0.0.0
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
-      - WEBHOOK_URL=http://<your-public-ip>:5678/
+      - WEBHOOK_URL=http://32.192.77.243:5678/
       - GENERIC_TIMEZONE=Asia/Karachi
       - TZ=Asia/Karachi
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
