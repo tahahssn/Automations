@@ -2,7 +2,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 
 // Config
-const BOT_TOKEN = 'MTQ4OTY0MjkyNTQ0ODIzNzIyNg.GOs3nA.Xml8VgtE9I_I3O5q-rgiaa3HrARX3P2QXtnPdM';
+const BOT_TOKEN = '';
 const N8N_WEBHOOK_URL = 'http://localhost:5678/webhook/discord-truthdare';
 
 // Create Discord client
