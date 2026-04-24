@@ -148,9 +148,131 @@ nano discord-bot.js
 
 ### 10. Start the Discord Bot
 
+#### Option A: Direct Execution (Simple)
+
 ```bash
 node discord-bot.js
 ```
+
+**Important**: The script will run continuously and listen for Discord commands. Keep this terminal window open. To stop the bot, press `Ctrl + C`.
+
+The bot will automatically:
+- Connect to Discord
+- Listen for commands (!help, !truth, !dare)
+- Keep running until manually stopped
+- Attempt to reconnect if connection drops
+
+#### Option B: Run in Background with Screen (Recommended)
+
+To run the bot in a detachable terminal session:
+
+```bash
+# Install screen if not already installed
+sudo apt install screen
+
+# Start the bot in a new screen session
+screen -S discord-bot -d -m node discord-bot.js
+
+# List active screen sessions
+screen -ls
+
+# Reattach to the session to view logs
+screen -r discord-bot
+
+# Detach from session (without stopping it): Press Ctrl + A, then D
+```
+
+#### Option C: Use PM2 for Process Management (Production)
+
+For enterprise-level process management:
+
+```bash
+# Install PM2 globally
+sudo npm install -g pm2
+
+# Start the bot with PM2
+pm2 start discord-bot.js --name discord-bot
+
+# View running processes
+pm2 list
+
+# View logs in real-time
+pm2 logs discord-bot
+
+# Stop the bot
+pm2 stop discord-bot
+
+# Restart the bot
+pm2 restart discord-bot
+
+# Make PM2 start on system boot (optional)
+pm2 startup
+pm2 save
+```
+
+#### Handling Crashes and Reconnections
+
+The Discord bot will automatically attempt to reconnect if:
+- Network connection drops
+- Discord API becomes temporarily unavailable
+- The bot is disconnected for any reason
+
+**Monitoring the Bot**:
+```bash
+# Check if the bot is running
+ps aux | grep discord-bot.js
+
+# View the bot's output/logs
+tail -f bot.log  # (if logs are piped to a file)
+```
+
+## Restarting After EC2 Stop
+
+If you stopped your EC2 instance and started it again, Docker containers do not restart automatically and your public IP will have changed. Follow these steps every time this happens.
+
+### 1. Get Your New Public IP
+
+Go to **AWS Console → EC2 → Instances** and copy your new **Public IPv4 address**.
+
+> **Note**: EC2 public IPs change every time the instance is stopped and started, unless you have an Elastic IP assigned.
+
+### 2. Update the Public IP in docker-compose.yml
+
+```bash
+cd ~/n8n
+nano docker-compose.yml
+```
+
+Find the line containing your old public IP (typically in `WEBHOOK_URL` or `N8N_HOST`) and replace it with the new one. Save and exit with `Ctrl + X`, then `Y`, then `Enter`.
+
+### 3. Bring n8n Back Up
+
+```bash
+cd ~/n8n
+docker-compose up -d
+
+# Confirm it's running
+docker ps
+```
+
+You should see n8n listed with a status of `Up`. Open `http://<Your_New_EC2_Public_IP>:5678/` in your browser to verify.
+
+### 4. Restart the Discord Bot
+
+Start the bot again using whichever method you used during setup:
+
+```bash
+# Option A - Direct
+node discord-bot.js
+
+# Option B - Screen
+screen -S discord-bot -d -m node discord-bot.js
+
+# Option C - PM2
+pm2 restart discord-bot
+```
+
+Send `!help` in your Discord server to confirm everything is back up and working.
 
 ## Testing the Bot
 
@@ -215,6 +337,7 @@ N8N_WEBHOOK_URL=your_n8n_webhook_url
 | Permission denied errors | Add user to docker group: `sudo usermod -aG docker $USER` |
 | Bot not responding | Check bot token is correctly set in `discord-bot.js` |
 | Workflow not executing | Verify Gemini API key is added to the n8n workflow |
+| n8n unreachable after EC2 restart | Update IP in `docker-compose.yml` and run `docker-compose up -d` |
 
 ### Viewing Logs
 
